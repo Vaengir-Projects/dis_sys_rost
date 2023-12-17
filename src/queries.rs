@@ -2,8 +2,8 @@ use crate::structs::*;
 use axum::{http::StatusCode, response::IntoResponse, Extension, Json};
 use sqlx::MySqlPool;
 
-pub async fn get_all_food(Extension(pool): Extension<MySqlPool>) -> impl IntoResponse {
-  let query = "Select id, name, price, vegetarian, vegan from food".to_string();
+pub async fn food(Extension(pool): Extension<MySqlPool>) -> impl IntoResponse {
+  let query = "Select food_id, food_name, food_price from food".to_string();
   let food: Vec<Food> = match sqlx::query_as(&query).fetch_all(&pool).await {
     Ok(food) => food,
     Err(e) => {
@@ -24,8 +24,8 @@ pub async fn add_food(
 ) -> impl IntoResponse {
   println!("{:?}", data);
   let query = format!(
-    "Insert into food (name, price, vegetarian, vegan) values ('{}', {}, {}, {})",
-    data.name, data.price, data.vegetarian, data.vegan
+    "Insert into food (food_name, food_price) values ('{}', {})",
+    data.food_name, data.food_price
   );
   let rows_affected = match sqlx::query(&query).execute(&pool).await {
     Ok(rows_affected) => rows_affected,
@@ -45,8 +45,8 @@ pub async fn add_food(
     .into_response()
 }
 
-pub async fn get_all_drinks(Extension(pool): Extension<MySqlPool>) -> impl IntoResponse {
-  let query = "Select id, name, price, size from drinks".to_string();
+pub async fn drinks(Extension(pool): Extension<MySqlPool>) -> impl IntoResponse {
+  let query = "Select drink_id, drink_name, drink_price, drink_size from drinks".to_string();
   let drinks: Vec<Drinks> = match sqlx::query_as(&query).fetch_all(&pool).await {
     Ok(drinks) => drinks,
     Err(e) => {
@@ -67,8 +67,8 @@ pub async fn add_drink(
 ) -> impl IntoResponse {
   println!("{:?}", data);
   let query = format!(
-    "Insert into drinks (name, price, size) values ('{}', {}, {})",
-    data.name, data.price, data.size
+    "Insert into drinks (drink_name, drink_price, drink_size) values ('{}', {}, {})",
+    data.drink_name, data.drink_price, data.drink_size
   );
   let rows_affected = match sqlx::query(&query).execute(&pool).await {
     Ok(rows_affected) => rows_affected,
