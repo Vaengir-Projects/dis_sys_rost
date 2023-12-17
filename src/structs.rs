@@ -14,10 +14,6 @@ pub struct Food {
   pub id: i64,
   pub name: String,
   pub price: f64,
-  #[serde(default)]
-  pub vegetarian: bool,
-  #[serde(default)]
-  pub vegan: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
