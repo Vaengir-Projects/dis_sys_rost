@@ -34,16 +34,14 @@ async fn main() {
 
   let app = Router::new()
     .route("/", get(|| async { "Gastronomie 9000" }))
-    .route("/food", get(get_all_food).layer(Extension(pool.clone())))
+    .route("/food", get(food).layer(Extension(pool.clone())))
     .route("/add/food", post(add_food).layer(Extension(pool.clone())))
-    .route(
-      "/drinks",
-      get(get_all_drinks).layer(Extension(pool.clone())),
-    )
+    .route("/drinks", get(drinks).layer(Extension(pool.clone())))
     .route(
       "/add/drinks",
       post(add_drink).layer(Extension(pool.clone())),
     )
+    .route("/items", get(items).layer(Extension(pool.clone())))
     .layer(middleware::from_fn(logging_middleware));
 
   println!("Running on http://{}", &server_url_display);
