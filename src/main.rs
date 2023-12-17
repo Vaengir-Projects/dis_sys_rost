@@ -1,7 +1,7 @@
 mod queries;
 mod structs;
 
-use crate::queries::{add_drink, add_food, get_all_drinks, get_all_food};
+use crate::queries::*;
 use axum::{
   body::Body,
   http::Request,
