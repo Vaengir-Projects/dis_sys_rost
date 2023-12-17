@@ -87,3 +87,19 @@ pub async fn add_drink(
   )
     .into_response()
 }
+
+pub async fn items(Extension(pool): Extension<MySqlPool>) -> impl IntoResponse {
+  let query = "Select item_id, item_type, item_name, item_price from items".to_string();
+  let items: Vec<Items> = match sqlx::query_as(&query).fetch_all(&pool).await {
+    Ok(items) => items,
+    Err(e) => {
+      return (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        format!("Internal server error: {}", e),
+      )
+        .into_response()
+    }
+  };
+
+  (StatusCode::OK, Json(items)).into_response()
+}
