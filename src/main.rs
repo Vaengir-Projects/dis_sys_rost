@@ -1,7 +1,7 @@
 mod queries;
 mod structs;
 
-use crate::queries::{add_drink, add_food, get_all_drinks, get_all_food};
+use crate::queries::*;
 use axum::{
   body::Body,
   http::Request,
@@ -34,16 +34,8 @@ async fn main() {
 
   let app = Router::new()
     .route("/", get(|| async { "Gastronomie 9000" }))
-    .route("/food", get(get_all_food).layer(Extension(pool.clone())))
-    .route("/add/food", post(add_food).layer(Extension(pool.clone())))
-    .route(
-      "/drinks",
-      get(get_all_drinks).layer(Extension(pool.clone())),
-    )
-    .route(
-      "/add/drinks",
-      post(add_drink).layer(Extension(pool.clone())),
-    )
+    .route("/items", get(items).layer(Extension(pool.clone())))
+    .route("/add/item", post(add_item).layer(Extension(pool.clone())))
     .layer(middleware::from_fn(logging_middleware));
 
   println!("Running on http://{}", &server_url_display);
