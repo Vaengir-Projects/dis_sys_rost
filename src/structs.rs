@@ -9,29 +9,12 @@ pub struct Tisch {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
-pub struct Food {
-  #[serde(default)]
-  pub food_id: i64,
-  pub food_name: String,
-  pub food_price: f64,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
-pub struct Drinks {
-  #[serde(default)]
-  pub drink_id: i64,
-  pub drink_name: String,
-  pub drink_price: f64,
-  pub drink_size: f64,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Items {
   #[serde(default)]
-  item_id: String,
-  item_type: String,
-  item_name: String,
-  item_price: f64,
+  pub item_id: i64,
+  pub item_name: String,
+  pub item_price: f64,
+  pub item_type: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
@@ -50,7 +33,8 @@ pub struct Order {
 pub struct OrderItem {
   #[serde(default)]
   pub orderitem_id: i64,
+  pub table_id: i64,
   pub order_id: i64,
-  pub item_id: String,
+  pub item_id: i64,
   pub orderitem_quantity: i64,
 }
