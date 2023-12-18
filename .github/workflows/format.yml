@@ -2,6 +2,7 @@ name: Cargo Check & Lint & Format
 
 on:
   push:
+    - '!main'
   pull_request:
     branches:
       - main
