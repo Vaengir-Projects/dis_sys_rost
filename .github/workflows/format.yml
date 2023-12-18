@@ -17,18 +17,18 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v3
       - name: Check
-        run: cargo check
+        run: cargo check --verbose
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v3
       - name: Lint
-        run: cargo clippy --all-features
+        run: cargo clippy --all-features --verbose
   fmt:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v3
-      - name: Lint
-        run: cargo fmt --all -- --check
+      - name: Format
+        run: cargo fmt --all -- --check --verbose
