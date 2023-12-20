@@ -1,5 +1,5 @@
 use crate::structs::*;
-use axum::{http::StatusCode, response::IntoResponse, Extension, Json};
+use axum::{extract::Path, http::StatusCode, response::IntoResponse, Extension, Json};
 use sqlx::MySqlPool;
 
 pub async fn items(Extension(pool): Extension<MySqlPool>) -> impl IntoResponse {
@@ -41,6 +41,17 @@ pub async fn add_item(
   (
     StatusCode::OK,
     format!("Number of rows affected: {:?}", rows_affected),
+  )
+    .into_response()
+}
+
+pub async fn handle_order(
+  Extension(pool): Extension<MySqlPool>,
+  Path(order_id): Path<u64>,
+) -> impl IntoResponse {
+  (
+    StatusCode::OK,
+    format!("{:?}, {}", pool, order_id),
   )
     .into_response()
 }

@@ -36,6 +36,10 @@ async fn main() {
     .route("/", get(|| async { "Gastronomie 9000" }))
     .route("/items", get(items).layer(Extension(pool.clone())))
     .route("/add/item", post(add_item).layer(Extension(pool.clone())))
+    .route(
+      "/order/:order_id",
+      get(handle_order).layer(Extension(pool.clone())),
+    )
     .layer(middleware::from_fn(logging_middleware));
 
   println!("Running on http://{}", &server_url_display);
