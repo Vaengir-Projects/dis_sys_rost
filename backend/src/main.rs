@@ -4,7 +4,7 @@ mod structs;
 use crate::queries::*;
 use axum::{
   body::Body,
-  http::Request,
+  http::{Method, Request},
   middleware::{self, Next},
   response::Response,
   routing::{get, post},
@@ -13,10 +13,21 @@ use axum::{
 use chrono::Local;
 use dotenv::dotenv;
 use sqlx::MySqlPool;
-use std::env;
+use std::{env, fs::OpenOptions, io::Write};
 
 async fn logging_middleware(req: Request<Body>, next: Next<Body>) -> Response {
-  println!("Received a request to {} at: {}", req.uri(), Local::now());
+  let mut file = OpenOptions::new()
+    .write(true)
+    .create(true)
+    .append(true)
+    .open("/tmp/dis_sys_log.txt")
+    .expect("Couldn't access Logfile");
+  let message = match req.method() {
+    &Method::GET => format!("Received request to {} at: {}", req.uri(), Local::now()),
+    _ => format!("Received an invalid request"),
+  };
+  file.write_all(&message.as_bytes()).expect("Couldn't write to Logfile");
+  println!("{}", &message);
   next.run(req).await
 }
 
