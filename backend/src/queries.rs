@@ -49,9 +49,17 @@ pub async fn handle_order(
   Extension(pool): Extension<MySqlPool>,
   Path(order_id): Path<u64>,
 ) -> impl IntoResponse {
-  (
-    StatusCode::OK,
-    format!("{:?}, {}", pool, order_id),
-  )
-    .into_response()
+  let query = format!("Select order_id, order_timestamp, total_amount, order_paid, pay_timestamp from `order` where order_id = {}", order_id);
+  let order: Order = match sqlx::query_as(&query).fetch_one(&pool).await {
+    Ok(order) => order,
+    Err(e) => {
+      return (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        format!("Internal server error: {}", e),
+      )
+        .into_response()
+    }
+  };
+
+  (StatusCode::OK, Json(order)).into_response()
 }
