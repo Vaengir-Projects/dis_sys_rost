@@ -23,10 +23,21 @@ async fn logging_middleware(req: Request<Body>, next: Next<Body>) -> Response {
     .open("/tmp/dis_sys_log.txt")
     .expect("Couldn't access Logfile");
   let message = match req.method() {
-    &Method::GET => format!("Received request to {} at: {}", req.uri(), Local::now()),
+    &Method::GET => format!(
+      "GET: Received a request to {} at: {}",
+      req.uri(),
+      Local::now()
+    ),
+    &Method::POST => format!(
+      "POST: Received a request to {} at: {}",
+      req.uri(),
+      Local::now(),
+    ),
     _ => format!("Received an invalid request"),
   };
-  file.write_all(&message.as_bytes()).expect("Couldn't write to Logfile");
+  file
+    .write_all(&message.as_bytes())
+    .expect("Couldn't write to Logfile");
   println!("{}", &message);
   next.run(req).await
 }
